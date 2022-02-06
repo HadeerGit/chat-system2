@@ -1,0 +1,84 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=chat_app
+    ports:
+      - "3306:3306"
+    networks:
+      - chat-app
+  #  elasticsearch:
+  #    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+  ##    hostname: elasticsearch
+  #    environment:
+  #      - cluster.name=docker-cluster
+  #      - discovery.type=single-node
+  #      - network.host=0.0.0.0
+  #      - bootstrap.memory_lock=true
+  #      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #      - xpack.monitoring.enabled=false
+  #      - xpack.graph.enabled=false
+  #      - xpack.watcher.enabled=false
+  #    ulimits:
+  #      memlock:
+  #        soft: -1
+  #        hard: -1
+  #    volumes:
+  #      - ./docker_data/elasticsearch/data:/app/src/share/elasticsearch/data
+  #    ports:
+  #      - 9200:9200
+  #      - 9300:9300
+  #    networks:
+  #      - chat-app
+  #  elasticsearch:
+  #      image: elasticsearch:7.16.3
+  #      ports:
+  #      - "9200:9200"
+  #      - "9300:9300"
+  #  rabbitmq:
+  #      image: rabbitmq:3.7
+  #      ports:
+  #          - "15671:15672"
+  #          - "5672:5672"
+  rabbitmq:
+    image: rabbitmq:3.7
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/app/src/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/app/src/log/rabbitmq
+    networks:
+      - chat-app
+  redis:
+    image: redis:3.2.11
+    networks:
+      - chat-app
+  app:
+    build: .
+    container_name: chat-system
+    #    command: tail -f /dev/null
+    command: bundle exec rails s -b 0.0.0.0 -p 3000
+    #    command: /entrypoint.sh
+    volumes:
+      - ".:/src/app"
+    environment:
+      #      WAIT_HOSTS: db:3306, elasticsearch:9200, rabbitmq:5672
+      APPLICATION_PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - rabbitmq
+    #      - elasticsearch
+    networks:
+      - chat-app
+
+networks:
+  chat-app:
+    driver: bridge
