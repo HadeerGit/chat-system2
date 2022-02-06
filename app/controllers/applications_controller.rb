@@ -3,12 +3,11 @@ class ApplicationsController < ApplicationController
 
   # GET /applications
   def show
-    # verify_application_token or return
     render json: @application, status: :ok
   end
 
   # POST /applications
-  #
+
   def create
     @application = Application.new(name: application_params[:name])
     if @application.save
@@ -16,19 +15,10 @@ class ApplicationsController < ApplicationController
     else
       render json: @application.errors, status: :unprocessable_entity
     end
-    # PUBLISHER.publish({ action: "create", application: @application })
-    # # QueueWorker.perform_async(3)
-    # render json: @application, status: :created
   end
 
   # PATCH/PUT /applications
   def update
-    # verify_application_token or return
-    #
-    # @application.assign_attributes(name: application_params[:name])
-    # WorkQueue.enqueue_job({type: "edit", application: @application})
-
-    # render status: :no_content
     if @application.update(name: application_params[:name])
       render status: :no_content
     else

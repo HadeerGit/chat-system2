@@ -1,3 +1,3 @@
 class MessageSerializer < ApplicationSerializer
-  attributes :id
+  attributes :identifier, :body
 end

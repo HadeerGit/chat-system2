@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
   # GET /messages/1
   def show
     set_message or return
-    render json: @message
+    render json: @message, status: :ok
   end
 
   # POST /messages
@@ -21,9 +21,9 @@ class MessagesController < ApplicationController
       @chat.update!(messages_count: @chat.messages_count + 1)
     end
 
-    @message = @chat.messages.new(name: message_params[:body], identifier: @chat.messages_count)
+    @message = @chat.messages.new(body: message_params[:body], identifier: @chat.messages_count)
     PUBLISHER.publish({ action: "create", message: @message , chat_identifier: params["chat_identifier"]})
-    render json: @message, status: :created
+    render status: :created
   end
 
   # PATCH/PUT /messages/1
@@ -43,7 +43,9 @@ class MessagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_message
-      @message = @chat.messages.find_by(params[:message_number])
+      @message = @chat.messages.find_by(identifier: params[:number])
+      return_entity_not_found("message is not found") and return false unless @message
+      true
     end
 
     # Only allow a trusted parameter "white list" through.
@@ -56,13 +58,11 @@ class MessagesController < ApplicationController
   end
 
   def verify
-    puts params
     @application = Application.find_by(token: params[:application_token])
     return_entity_not_found("no application was found with this token") and return false unless @application
 
     @chat = @application.chats.find_by("identifier": params[:chat_number])
     return_entity_not_found("chat identifier is not found") and return false unless @chat
-
     true
   end
 end

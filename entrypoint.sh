@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo "waiting for database to start..."
 echo "setting up database..."
-#bin/rake db:setup && bin/rake db:migrate && bin/rake db:migrate RAILS_ENV=test
+bin/rake db:setup && bin/rake db:migrate
 echo "starting workers..."
 WORKERS=Worker bin/rake sneakers:run
 echo "starting application server..."

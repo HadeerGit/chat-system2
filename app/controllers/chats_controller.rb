@@ -60,8 +60,4 @@ class ChatsController < ApplicationController
     def chat_params
       params.fetch(:chat).permit(:name)
     end
-
-  def invalid_parameters(exception)
-    render json: { errors: { exception.parameter => "'Value #{ exception.value }' is invalid." } }, status: 400
-  end
 end
