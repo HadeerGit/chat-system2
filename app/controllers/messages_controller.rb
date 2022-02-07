@@ -22,17 +22,15 @@ class MessagesController < ApplicationController
     end
 
     @message = @chat.messages.new(body: message_params[:body], identifier: @chat.messages_count)
-    PUBLISHER.publish({ action: "create", message: @message , chat_identifier: params["chat_identifier"]})
+    PUBLISHER.publish({ action: "create", message: @message , chat_identifier: params["chat_number"]})
     render status: :created
   end
 
   # PATCH/PUT /messages/1
   def update
-    if @message.update(message_params)
-      render json: @message
-    else
-      render json: @message.errors, status: :unprocessable_entity
-    end
+    set_message or return
+    PUBLISHER.publish({ action: "update", message: @message , chat_identifier: params["chat_number"]})
+    render status: :no_content
   end
 
   # DELETE /messages/1

@@ -50,7 +50,6 @@ class ChatsController < ApplicationController
   end
 
   def verify_token
-    puts params
     @application = Application.find_by_token(params[:application_token])
     return_entity_not_found("no application was found with this token") and return false unless @application
     true

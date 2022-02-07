@@ -11,9 +11,7 @@ module PUBLISHER
     queue  = channel.queue("jobs", :durable => true)
 
     # publish a message to the default exchange which then gets routed to this queue
-    puts "DDDD"
     queue.publish(msg.to_json)
-    puts "after"
     connection.close
   end
 end
