@@ -11,29 +11,29 @@ services:
       - "3306:3306"
     networks:
       - chat-app
-  #  elasticsearch:
-  #    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
-  ##    hostname: elasticsearch
-  #    environment:
-  #      - cluster.name=docker-cluster
-  #      - discovery.type=single-node
-  #      - network.host=0.0.0.0
-  #      - bootstrap.memory_lock=true
-  #      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-  #      - xpack.monitoring.enabled=false
-  #      - xpack.graph.enabled=false
-  #      - xpack.watcher.enabled=false
-  #    ulimits:
-  #      memlock:
-  #        soft: -1
-  #        hard: -1
-  #    volumes:
-  #      - ./docker_data/elasticsearch/data:/app/src/share/elasticsearch/data
-  #    ports:
-  #      - 9200:9200
-  #      - 9300:9300
-  #    networks:
-  #      - chat-app
+  elasticsearch:
+      image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+  #    hostname: elasticsearch
+      environment:
+        - cluster.name=docker-cluster
+        - discovery.type=single-node
+        - network.host=0.0.0.0
+        - bootstrap.memory_lock=true
+        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        - xpack.monitoring.enabled=false
+        - xpack.graph.enabled=false
+        - xpack.watcher.enabled=false
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+      volumes:
+        - ./docker_data/elasticsearch/data:/app/src/share/elasticsearch/data
+      ports:
+        - 9200:9200
+        - 9300:9300
+      networks:
+        - chat-app
   #  elasticsearch:
   #      image: elasticsearch:7.16.3
   #      ports:

@@ -33,9 +33,8 @@ class MessagesController < ApplicationController
     render status: :no_content
   end
 
-  # DELETE /messages/1
-  def destroy
-    @message.destroy
+  def search
+
   end
 
   private

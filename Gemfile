@@ -31,9 +31,7 @@ gem 'sneakers', '~> 2.11.0'
 
 gem 'active_model_serializers'
 
-gem 'sidekiq'
-
-# gem 'elasticsearch-model', '~> 7.0.0'
+gem 'elasticsearch-model', '~> 7.0.0'
 
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
